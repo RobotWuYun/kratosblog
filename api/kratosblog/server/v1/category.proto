@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api.kratosblog.server.v1;
+
+option go_package = "kratosblog/api/kratosblog/server/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.kratosblog.server.v1";
+
+service Category {
+	rpc ListCategory (ListCategoryRequest) returns (ListCategoryReply){
+		option (google.api.http) = {
+			get: "/v1/category/list"
+		};
+	};
+}
+
+message ListCategoryRequest {}
+message ListCategoryReply {}
