@@ -2,6 +2,11 @@ syntax = "proto3";
 
 package api.kratosblog.server.v1;
 
+import "google/api/annotations.proto";
+
+import "api/kratosblog/data/v1/category.proto";
+
+
 option go_package = "kratosblog/api/kratosblog/server/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.kratosblog.server.v1";
@@ -15,4 +20,6 @@ service Category {
 }
 
 message ListCategoryRequest {}
-message ListCategoryReply {}
+message ListCategoryReply {
+		repeated api.kratosblog.data.v1.Category list = 1;
+}

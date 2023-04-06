@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package api.kratosblog.data.v1;
+
+option go_package = "kratosblog/api/kratosblog/data/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.kratosblog.data.v1";
+
+enum CategoryStatus {
+	CategoryStatusUnknown = 0;
+	CategoryStatusNormal = 1;
+	CategoryStatusHide = 2;
+}
+
+message Category {
+	int64 id = 1;
+	string name = 2;
+	string cover = 3;
+	string description = 4;
+	string color = 5;
+	string article_count = 6;
+}

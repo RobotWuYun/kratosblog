@@ -1,27 +1,10 @@
-# Kratos Project Template
+# Kratos Blog
 
-## Install Kratos
-```
-go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
-```
-## Create a service
-```
-# Create a template project
-kratos new server
+Self bolg by Kratos
 
-cd server
-# Add a proto template
-kratos proto add api/server/server.proto
-# Generate the proto code
-kratos proto client api/server/server.proto
-# Generate the source code of service by proto file
-kratos proto server api/server/server.proto -t internal/service
+以github为存储库，使用kratos框架开发的个人博客系统
 
-go generate ./...
-go build -o ./bin/ ./...
-./bin/server -conf ./configs
-```
-## Generate other auxiliary files by Makefile
+### make 
 ```
 # Download and update dependencies
 make init
@@ -30,7 +13,7 @@ make api
 # Generate all files
 make all
 ```
-## Automated Initialization (wire)
+### Automated Initialization (wire)
 ```
 # install wire
 go get github.com/google/wire/cmd/wire
@@ -40,7 +23,7 @@ cd cmd/server
 wire
 ```
 
-## Docker
+### Docker
 ```bash
 # build
 docker build -t <your-docker-image-name> .
