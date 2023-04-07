@@ -36,6 +36,11 @@ paths:
             tags:
                 - Category
             operationId: Category_ListCategory
+            parameters:
+                - name: key
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK

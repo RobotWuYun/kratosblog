@@ -57,6 +57,8 @@ func (m *ListCategoryRequest) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Key
+
 	if len(errors) > 0 {
 		return ListCategoryRequestMultiError(errors)
 	}

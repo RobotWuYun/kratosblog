@@ -38,4 +38,10 @@ message Data {
   }
   Database database = 1;
   Redis redis = 2;
+  Repository repository = 3;
+}
+
+message Repository {
+  string path = 1;
+  string private_suffix = 2;
 }

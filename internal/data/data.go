@@ -12,11 +12,12 @@ var ProviderSet = wire.NewSet(
 	NewData,
 	NewGreeterRepo,
 	NewCategoryRepo,
+	NewAuthRepo,
 )
 
 // Data .
 type Data struct {
-	// TODO wrapped database client
+	conf *conf.Bootstrap
 }
 
 // NewData .
@@ -24,5 +25,7 @@ func NewData(c *conf.Bootstrap, logger log.Logger) (*Data, func(), error) {
 	cleanup := func() {
 		log.NewHelper(logger).Info("closing the data resources")
 	}
-	return &Data{}, cleanup, nil
+	return &Data{
+		conf: c,
+	}, cleanup, nil
 }
