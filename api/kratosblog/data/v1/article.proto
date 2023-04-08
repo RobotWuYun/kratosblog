@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package api.kratosblog.data.v1;
+
+option go_package = "kratosblog/api/kratosblog/data/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.kratosblog.data.v1";
+
+import "api/kratosblog/data/v1/common.proto";
+import "api/kratosblog/data/v1/tag.proto";
+
+message Article {
+  int64 id = 1;
+  string title = 2;
+  api.kratosblog.data.v1.Image cover = 3;
+  string content = 4;
+  repeated api.kratosblog.data.v1.Tag tags = 5;
+}

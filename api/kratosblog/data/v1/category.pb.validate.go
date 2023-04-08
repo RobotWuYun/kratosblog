@@ -61,7 +61,34 @@ func (m *Category) validate(all bool) error {
 
 	// no validation rules for Name
 
-	// no validation rules for Cover
+	if all {
+		switch v := interface{}(m.GetCover()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CategoryValidationError{
+					field:  "Cover",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CategoryValidationError{
+					field:  "Cover",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCover()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CategoryValidationError{
+				field:  "Cover",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Description
 

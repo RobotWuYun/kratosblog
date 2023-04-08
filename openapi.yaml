@@ -31,6 +31,103 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
+    /v1/articles/category:
+        get:
+            tags:
+                - Article
+            operationId: Article_CategoryList
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CategoryListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/articles/list:
+        get:
+            tags:
+                - Article
+            operationId: Article_List
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /v1/articles/tag:
+        get:
+            tags:
+                - Article
+            operationId: Article_TagList
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TagListReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
     /v1/category/list:
         get:
             tags:
@@ -56,6 +153,22 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
+        Article:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                title:
+                    type: string
+                cover:
+                    $ref: '#/components/schemas/Image'
+                content:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Tag'
         Category:
             type: object
             properties:
@@ -65,13 +178,23 @@ components:
                 name:
                     type: string
                 cover:
-                    type: string
+                    $ref: '#/components/schemas/Image'
                 description:
                     type: string
                 color:
                     type: string
                 articleCount:
                     type: string
+        CategoryListReply:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Article'
         GoogleProtobufAny:
             type: object
             properties:
@@ -86,6 +209,13 @@ components:
                 message:
                     type: string
             description: The response message containing the greetings
+        Image:
+            type: object
+            properties:
+                url:
+                    type: string
+                color:
+                    type: string
         ListCategoryReply:
             type: object
             properties:
@@ -93,6 +223,16 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/Category'
+        ListReply:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Article'
         Status:
             type: object
             properties:
@@ -109,7 +249,30 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        Tag:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                name:
+                    type: string
+                color:
+                    type: string
+                articleCount:
+                    type: string
+        TagListReply:
+            type: object
+            properties:
+                total:
+                    type: integer
+                    format: int64
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Article'
 tags:
+    - name: Article
     - name: Category
     - name: Greeter
       description: The greeting service definition.

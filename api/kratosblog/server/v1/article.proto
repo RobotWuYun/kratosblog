@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package api.kratosblog.server.v1;
+
+import "google/api/annotations.proto";
+
+import "api/kratosblog/data/v1/article.proto";
+
+option go_package = "kratosblog/api/kratosblog/server/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.kratosblog.server.v1";
+
+service Article {
+	rpc CategoryList (CategoryListRequest) returns (CategoryListReply){
+		option (google.api.http) = {
+			get: "/v1/articles/category"
+		};
+	};
+	rpc TagList (TagListRequest) returns (TagListReply){
+		option (google.api.http) = {
+			get: "/v1/articles/tag"
+		};
+	};
+	rpc List (ListRequest) returns (ListReply){
+		option (google.api.http) = {
+			get: "/v1/articles/list"
+		};
+	};
+}
+
+message CategoryListRequest {
+	int64 id = 1;
+	int64 page = 2;
+	int64 page_size = 3;
+}
+message CategoryListReply {
+		int64 total = 1;
+		repeated api.kratosblog.data.v1.Article list = 2;
+}
+
+message TagListRequest {
+	int64 id = 1;
+	int64 page = 2;
+	int64 page_size = 3;
+}
+message TagListReply {
+	int64 total = 1;
+	repeated api.kratosblog.data.v1.Article list = 2;
+}
+
+message ListRequest {
+	int64 page = 2;
+	int64 page_size = 3;
+}
+message ListReply {
+	int64 total = 1;
+	repeated api.kratosblog.data.v1.Article list = 2;
+}
