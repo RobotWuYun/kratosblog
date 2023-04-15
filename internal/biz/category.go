@@ -8,7 +8,8 @@ import (
 
 // CategoryRepo is a Greater repo.
 type CategoryRepo interface {
-	List(context.Context, bool) ([]*dataV1.Category, error)
+	List(ctx context.Context) (list []*dataV1.Category, err error)
+	MapPath(ctx context.Context) (cates map[string]string, err error)
 }
 
 // CategoryUsecase is a Category usecase.
@@ -22,6 +23,6 @@ func NewCategoryUsecase(repo CategoryRepo, logger log.Logger) *CategoryUsecase {
 	return &CategoryUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-func (uc *CategoryUsecase) List(ctx context.Context, getAll bool) (list []*dataV1.Category, err error) {
-	return uc.repo.List(ctx, getAll)
+func (uc *CategoryUsecase) List(ctx context.Context) (list []*dataV1.Category, err error) {
+	return uc.repo.List(ctx)
 }

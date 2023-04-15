@@ -133,11 +133,6 @@ paths:
             tags:
                 - Category
             operationId: Category_ListCategory
-            parameters:
-                - name: key
-                  in: query
-                  schema:
-                    type: string
             responses:
                 "200":
                     description: OK
@@ -169,6 +164,11 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/Tag'
+                category:
+                    $ref: '#/components/schemas/Category'
+                updatedAt:
+                    type: string
+                    format: date-time
         Category:
             type: object
             properties:

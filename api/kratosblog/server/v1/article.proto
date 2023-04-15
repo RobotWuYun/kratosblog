@@ -49,8 +49,8 @@ message TagListReply {
 }
 
 message ListRequest {
-	int64 page = 2;
-	int64 page_size = 3;
+	int64 page = 1;
+	int64 page_size = 2;
 }
 message ListReply {
 	int64 total = 1;

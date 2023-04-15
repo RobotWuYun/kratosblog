@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"kratosblog/api/kratosblog/server/v1"
-
 	"kratosblog/internal/biz"
 )
 
@@ -11,8 +10,7 @@ import (
 type CategoryService struct {
 	v1.UnimplementedCategoryServer
 
-	uc   *biz.CategoryUsecase
-	auth *biz.AuthUsecase
+	uc *biz.CategoryUsecase
 }
 
 // NewCategoryService new a category service.
@@ -21,20 +19,12 @@ func NewCategoryService(
 	auth *biz.AuthUsecase,
 ) *CategoryService {
 	return &CategoryService{
-		uc:   uc,
-		auth: auth,
+		uc: uc,
 	}
 }
 
 func (s *CategoryService) ListCategory(ctx context.Context, req *v1.ListCategoryRequest) (resp *v1.ListCategoryReply, err error) {
 	resp = &v1.ListCategoryReply{}
-
-	var getAll bool
-	getAll, err = s.auth.Check(ctx, req.GetKey())
-	if err != nil {
-		return
-	}
-
-	resp.List, err = s.uc.List(ctx, getAll)
+	resp.List, err = s.uc.List(ctx)
 	return
 }

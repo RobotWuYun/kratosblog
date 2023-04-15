@@ -8,6 +8,8 @@ option java_package = "api.kratosblog.data.v1";
 
 import "api/kratosblog/data/v1/common.proto";
 import "api/kratosblog/data/v1/tag.proto";
+import "api/kratosblog/data/v1/category.proto";
+import "google/protobuf/timestamp.proto";
 
 message Article {
   int64 id = 1;
@@ -15,4 +17,6 @@ message Article {
   api.kratosblog.data.v1.Image cover = 3;
   string content = 4;
   repeated api.kratosblog.data.v1.Tag tags = 5;
+  api.kratosblog.data.v1.Category category = 6;
+  google.protobuf.Timestamp updated_at = 7;
 }

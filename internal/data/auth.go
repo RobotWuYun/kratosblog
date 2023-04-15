@@ -3,6 +3,7 @@ package data
 import (
 	"context"
 	"kratosblog/internal/biz"
+	"kratosblog/internal/util"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -24,6 +25,6 @@ func (r *authRepo) Make(ctx context.Context) (err error) {
 	return
 }
 
-func (r *authRepo) Check(ctx context.Context, key string) (pass bool, err error) {
-	return key == "wuyun", nil
+func (r *authRepo) Check(ctx context.Context) (pass bool, err error) {
+	return util.GetKey(ctx) == "wuyun", nil
 }

@@ -20,8 +20,8 @@ service Category {
 }
 
 message ListCategoryRequest {
-	string key = 1;
 }
+
 message ListCategoryReply {
 		repeated api.kratosblog.data.v1.Category list = 1;
 }
