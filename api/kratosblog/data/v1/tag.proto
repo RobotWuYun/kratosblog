@@ -7,7 +7,7 @@ option java_multiple_files = true;
 option java_package = "api.kratosblog.data.v1";
 
 message Tag {
-  int64 id = 1;
+  string id = 1;
   string name = 2;
   string color = 3;
   string article_count = 4;

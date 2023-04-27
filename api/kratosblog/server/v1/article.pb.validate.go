@@ -759,3 +759,233 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListReplyValidationError{}
+
+// Validate checks the field values on DetailRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *DetailRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DetailRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DetailRequestMultiError, or
+// nil if none found.
+func (m *DetailRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DetailRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return DetailRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// DetailRequestMultiError is an error wrapping multiple validation errors
+// returned by DetailRequest.ValidateAll() if the designated constraints
+// aren't met.
+type DetailRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DetailRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DetailRequestMultiError) AllErrors() []error { return m }
+
+// DetailRequestValidationError is the validation error returned by
+// DetailRequest.Validate if the designated constraints aren't met.
+type DetailRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DetailRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DetailRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DetailRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DetailRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DetailRequestValidationError) ErrorName() string { return "DetailRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DetailRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDetailRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DetailRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DetailRequestValidationError{}
+
+// Validate checks the field values on DetailReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *DetailReply) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DetailReply with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in DetailReplyMultiError, or
+// nil if none found.
+func (m *DetailReply) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DetailReply) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetDetail()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DetailReplyValidationError{
+					field:  "Detail",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DetailReplyValidationError{
+					field:  "Detail",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDetail()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DetailReplyValidationError{
+				field:  "Detail",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return DetailReplyMultiError(errors)
+	}
+
+	return nil
+}
+
+// DetailReplyMultiError is an error wrapping multiple validation errors
+// returned by DetailReply.ValidateAll() if the designated constraints aren't met.
+type DetailReplyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DetailReplyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DetailReplyMultiError) AllErrors() []error { return m }
+
+// DetailReplyValidationError is the validation error returned by
+// DetailReply.Validate if the designated constraints aren't met.
+type DetailReplyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DetailReplyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DetailReplyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DetailReplyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DetailReplyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DetailReplyValidationError) ErrorName() string { return "DetailReplyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DetailReplyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDetailReply.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DetailReplyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DetailReplyValidationError{}

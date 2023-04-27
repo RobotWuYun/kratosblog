@@ -20,11 +20,13 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationArticleCategoryList = "/api.kratosblog.server.v1.Article/CategoryList"
+const OperationArticleDetail = "/api.kratosblog.server.v1.Article/Detail"
 const OperationArticleList = "/api.kratosblog.server.v1.Article/List"
 const OperationArticleTagList = "/api.kratosblog.server.v1.Article/TagList"
 
 type ArticleHTTPServer interface {
 	CategoryList(context.Context, *CategoryListRequest) (*CategoryListReply, error)
+	Detail(context.Context, *DetailRequest) (*DetailReply, error)
 	List(context.Context, *ListRequest) (*ListReply, error)
 	TagList(context.Context, *TagListRequest) (*TagListReply, error)
 }
@@ -34,6 +36,7 @@ func RegisterArticleHTTPServer(s *http.Server, srv ArticleHTTPServer) {
 	r.GET("/v1/articles/category", _Article_CategoryList0_HTTP_Handler(srv))
 	r.GET("/v1/articles/tag", _Article_TagList0_HTTP_Handler(srv))
 	r.GET("/v1/articles/list", _Article_List0_HTTP_Handler(srv))
+	r.GET("/v1/articles/detail", _Article_Detail0_HTTP_Handler(srv))
 }
 
 func _Article_CategoryList0_HTTP_Handler(srv ArticleHTTPServer) func(ctx http.Context) error {
@@ -93,8 +96,28 @@ func _Article_List0_HTTP_Handler(srv ArticleHTTPServer) func(ctx http.Context) e
 	}
 }
 
+func _Article_Detail0_HTTP_Handler(srv ArticleHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DetailRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationArticleDetail)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Detail(ctx, req.(*DetailRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DetailReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type ArticleHTTPClient interface {
 	CategoryList(ctx context.Context, req *CategoryListRequest, opts ...http.CallOption) (rsp *CategoryListReply, err error)
+	Detail(ctx context.Context, req *DetailRequest, opts ...http.CallOption) (rsp *DetailReply, err error)
 	List(ctx context.Context, req *ListRequest, opts ...http.CallOption) (rsp *ListReply, err error)
 	TagList(ctx context.Context, req *TagListRequest, opts ...http.CallOption) (rsp *TagListReply, err error)
 }
@@ -112,6 +135,19 @@ func (c *ArticleHTTPClientImpl) CategoryList(ctx context.Context, in *CategoryLi
 	pattern := "/v1/articles/category"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationArticleCategoryList))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *ArticleHTTPClientImpl) Detail(ctx context.Context, in *DetailRequest, opts ...http.CallOption) (*DetailReply, error) {
+	var out DetailReply
+	pattern := "/v1/articles/detail"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationArticleDetail))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

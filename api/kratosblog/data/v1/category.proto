@@ -14,7 +14,7 @@ enum CategoryStatus {
 }
 
 message Category {
-	int64 id = 1;
+	string id = 1;
 	string name = 2;
 	api.kratosblog.data.v1.Image cover = 3;
 	string description = 4;

@@ -13,6 +13,7 @@ var ProviderSet = wire.NewSet(
 	NewGreeterRepo,
 	NewCategoryRepo,
 	NewAuthRepo,
+	NewArticleRepo,
 )
 
 // Data .

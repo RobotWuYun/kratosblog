@@ -12,7 +12,7 @@ import "api/kratosblog/data/v1/category.proto";
 import "google/protobuf/timestamp.proto";
 
 message Article {
-  int64 id = 1;
+  string id = 1;
   string title = 2;
   api.kratosblog.data.v1.Image cover = 3;
   string content = 4;

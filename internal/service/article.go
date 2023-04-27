@@ -44,3 +44,9 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListRequest) (resp *v
 	resp.Total, resp.List, err = s.uc.List(ctx, offset, limit)
 	return
 }
+
+func (s *ArticleService) Detail(ctx context.Context, req *v1.DetailRequest) (resp *v1.DetailReply, err error) {
+	resp = &v1.DetailReply{}
+	resp.Detail, err = s.uc.Detail(ctx, req.GetId())
+	return
+}

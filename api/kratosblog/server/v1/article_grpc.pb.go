@@ -22,6 +22,7 @@ const (
 	Article_CategoryList_FullMethodName = "/api.kratosblog.server.v1.Article/CategoryList"
 	Article_TagList_FullMethodName      = "/api.kratosblog.server.v1.Article/TagList"
 	Article_List_FullMethodName         = "/api.kratosblog.server.v1.Article/List"
+	Article_Detail_FullMethodName       = "/api.kratosblog.server.v1.Article/Detail"
 )
 
 // ArticleClient is the client API for Article service.
@@ -31,6 +32,7 @@ type ArticleClient interface {
 	CategoryList(ctx context.Context, in *CategoryListRequest, opts ...grpc.CallOption) (*CategoryListReply, error)
 	TagList(ctx context.Context, in *TagListRequest, opts ...grpc.CallOption) (*TagListReply, error)
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListReply, error)
+	Detail(ctx context.Context, in *DetailRequest, opts ...grpc.CallOption) (*DetailReply, error)
 }
 
 type articleClient struct {
@@ -68,6 +70,15 @@ func (c *articleClient) List(ctx context.Context, in *ListRequest, opts ...grpc.
 	return out, nil
 }
 
+func (c *articleClient) Detail(ctx context.Context, in *DetailRequest, opts ...grpc.CallOption) (*DetailReply, error) {
+	out := new(DetailReply)
+	err := c.cc.Invoke(ctx, Article_Detail_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ArticleServer is the server API for Article service.
 // All implementations must embed UnimplementedArticleServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type ArticleServer interface {
 	CategoryList(context.Context, *CategoryListRequest) (*CategoryListReply, error)
 	TagList(context.Context, *TagListRequest) (*TagListReply, error)
 	List(context.Context, *ListRequest) (*ListReply, error)
+	Detail(context.Context, *DetailRequest) (*DetailReply, error)
 	mustEmbedUnimplementedArticleServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedArticleServer) TagList(context.Context, *TagListRequest) (*Ta
 }
 func (UnimplementedArticleServer) List(context.Context, *ListRequest) (*ListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
+}
+func (UnimplementedArticleServer) Detail(context.Context, *DetailRequest) (*DetailReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Detail not implemented")
 }
 func (UnimplementedArticleServer) mustEmbedUnimplementedArticleServer() {}
 
@@ -158,6 +173,24 @@ func _Article_List_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Article_Detail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArticleServer).Detail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Article_Detail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArticleServer).Detail(ctx, req.(*DetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Article_ServiceDesc is the grpc.ServiceDesc for Article service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var Article_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "List",
 			Handler:    _Article_List_Handler,
+		},
+		{
+			MethodName: "Detail",
+			Handler:    _Article_Detail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

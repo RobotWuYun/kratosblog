@@ -26,6 +26,11 @@ service Article {
 			get: "/v1/articles/list"
 		};
 	};
+	rpc Detail (DetailRequest) returns (DetailReply){
+		option (google.api.http) = {
+			get: "/v1/articles/detail"
+		};
+	};
 }
 
 message CategoryListRequest {
@@ -55,4 +60,11 @@ message ListRequest {
 message ListReply {
 	int64 total = 1;
 	repeated api.kratosblog.data.v1.Article list = 2;
+}
+
+message DetailRequest {
+	string id = 1;
+}
+message DetailReply {
+	 api.kratosblog.data.v1.Article detail = 1;
 }

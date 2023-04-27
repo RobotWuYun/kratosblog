@@ -2,7 +2,9 @@ package util
 
 import (
 	"context"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"io/ioutil"
+	"os"
 	"strings"
 	"time"
 )
@@ -58,5 +60,49 @@ func GetAllMarkdownMap(ctx context.Context, source string) (total int64, fileMap
 		}
 	}
 	total = int64(len(fileMap))
+	return
+}
+
+func GetMarkdownContent(ctx context.Context, source string) (content string, err error) {
+	var data []byte
+	data, err = ioutil.ReadFile(source)
+	if err != nil {
+		return
+	}
+	content = string(data)
+	return
+}
+
+func GetFileInfo(ctx context.Context, source string) (name string, updateAt time.Time, err error) {
+	var file os.FileInfo
+	file, err = os.Stat(source)
+	if err != nil {
+		return
+	}
+	name = file.Name()
+	updateAt = file.ModTime()
+	return
+}
+
+func GetMarkdownInfo(ctx context.Context, source string) (name string, updateAt *timestamppb.Timestamp, content string, err error) {
+	var updateAtTime time.Time
+	name, updateAtTime, err = GetFileInfo(ctx, source)
+	if err != nil {
+		return
+	}
+	name = strings.TrimSuffix(name, ".md")
+	updateAt = timestamppb.New(updateAtTime)
+	content, err = GetMarkdownContent(ctx, source)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func GetFileNameWithoutFileFormat(fileName string) (out string) {
+	index := strings.Split(fileName, ".")
+	if len(index) > 0 {
+		out = index[0]
+	}
 	return
 }

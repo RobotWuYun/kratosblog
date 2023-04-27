@@ -55,7 +55,7 @@ func (r *categoryRepo) MapPath(ctx context.Context) (cateMap map[string]string, 
 	}
 
 	var allCates []string
-	allCates, err = util.GetAllLeafCate(r.data.conf.GetData().GetRepository().GetPath())
+	allCates, err = util.GetAllLeafCate(ctx, r.data.conf.GetData().GetRepository().GetPath())
 	if err != nil {
 		r.log.Error("GetAllLeafCate err .", err)
 		return

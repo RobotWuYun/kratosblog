@@ -9,6 +9,7 @@ import (
 // ArticleRepo is a Greater repo.
 type ArticleRepo interface {
 	List(ctx context.Context, page, pageSize int64) (int64, []*dataV1.Article, error)
+	Detail(ctx context.Context, id string) (*dataV1.Article, error)
 }
 
 // ArticleUsecase is a Article usecase.
@@ -24,4 +25,8 @@ func NewArticleUsecase(repo ArticleRepo, logger log.Logger) *ArticleUsecase {
 
 func (uc *ArticleUsecase) List(ctx context.Context, page, pageSize int64) (total int64, list []*dataV1.Article, err error) {
 	return uc.repo.List(ctx, page, pageSize)
+}
+
+func (uc *ArticleUsecase) Detail(ctx context.Context, id string) (detail *dataV1.Article, err error) {
+	return uc.repo.Detail(ctx, id)
 }

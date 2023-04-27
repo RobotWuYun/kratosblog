@@ -5,6 +5,7 @@ server:
   grpc:
     addr: 0.0.0.0:9000
     timeout: 1s
+  ase_key: 0123456789ABCDEF0123456789ABCDEF
 data:
   database:
     driver: mysql
