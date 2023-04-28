@@ -5,6 +5,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
+	"encoding/hex"
 	"github.com/spf13/viper"
 )
 
@@ -50,29 +51,30 @@ func (u *Aes) pkcs7UnPadding(data []byte) []byte {
 	return data[:(length - unPadding)]
 }
 
-func (u *Aes) AesEncrypt(data []byte) []byte {
+func (u *Aes) AesEncrypt(in string) string {
+	data := []byte(in)
 	blockSize := u.block.BlockSize()
 	encryptBytes := u.pkcs7Padding(data, blockSize)
 	crypted := make([]byte, len(encryptBytes))
 	blockMode := cipher.NewCBCEncrypter(u.block, u.key[:blockSize])
 	blockMode.CryptBlocks(crypted, encryptBytes)
-	return crypted
+	return hex.EncodeToString(crypted)
 }
 
-func (u *Aes) AesDecrypt(data []byte) []byte {
+func (u *Aes) AesDecrypt(in string) string {
+	data, _ := hex.DecodeString(in)
 	blockSize := u.block.BlockSize()
 	blockMode := cipher.NewCBCDecrypter(u.block, u.key[:blockSize])
 	crypted := make([]byte, len(data))
 	blockMode.CryptBlocks(crypted, data)
 	crypted = u.pkcs7UnPadding(crypted)
-	return crypted
+	return string(crypted)
 }
 
 // EncryptByAes Aes加密 后 base64 再加
 func (u *Aes) EncryptByAes(in string) string {
-	data := []byte(in)
-	res := u.AesEncrypt(data)
-	return base64.StdEncoding.EncodeToString(res)
+	res := u.AesEncrypt(in)
+	return base64.StdEncoding.EncodeToString([]byte(res))
 }
 
 // DecryptByAes Aes 解密
@@ -82,6 +84,6 @@ func (u *Aes) DecryptByAes(in string) (out string, err error) {
 	if err != nil {
 		return
 	}
-	out = string(u.AesDecrypt(dataByte))
+	out = u.AesDecrypt(string(dataByte))
 	return
 }

@@ -20,7 +20,10 @@ type articleRepo struct {
 type file struct {
 	Name string
 	Path string
-	Cate string
+	Cate struct {
+		ID   string
+		Name string
+	}
 }
 
 // NewArticleRepo .
@@ -61,11 +64,13 @@ func (r *articleRepo) getFilesFromDir(ctx context.Context) (total int64, list []
 	dates = util.Sort(ctx, dates)
 	for _, date := range dates {
 		for name, path := range timeFileMap[date] {
-			list = append(list, file{
+			data := file{
 				Name: name,
 				Path: path,
-				Cate: strings.Split(path, "/")[len(strings.Split(path, "/"))-2],
-			})
+			}
+			data.Cate.Name = strings.Split(path, "/")[len(strings.Split(path, "/"))-2]
+			data.Cate.ID, _ = util.GetID(ctx, strings.Join(strings.Split(path, "/")[:len(strings.Split(path, "/"))-1], "/"))
+			list = append(list, data)
 		}
 	}
 	return
@@ -99,7 +104,8 @@ func (r *articleRepo) List(ctx context.Context, offset, limit int64) (total int6
 			Id:    id,
 			Title: files[i].Name,
 			Category: &dataV1.Category{
-				Name: files[i].Cate,
+				Name: files[i].Cate.Name,
+				Id:   files[i].Cate.ID,
 			},
 		})
 	}
