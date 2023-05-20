@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	"github.com/go-kratos/kratos/v2/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	dataV1 "kratosblog/api/kratosblog/data/v1"
 	"kratosblog/internal/biz"
@@ -12,8 +11,6 @@ import (
 
 type articleRepo struct {
 	data *Data
-	log  *log.Helper
-
 	cate biz.CategoryRepo
 }
 
@@ -27,10 +24,9 @@ type file struct {
 }
 
 // NewArticleRepo .
-func NewArticleRepo(data *Data, logger log.Logger, cate biz.CategoryRepo) biz.ArticleRepo {
+func NewArticleRepo(data *Data, cate biz.CategoryRepo) biz.ArticleRepo {
 	return &articleRepo{
 		data: data,
-		log:  log.NewHelper(logger),
 		cate: cate,
 	}
 }
@@ -49,7 +45,7 @@ func (r *articleRepo) getFilesFromDir(ctx context.Context) (total int64, list []
 	for _, path := range cateMap {
 		_, files, err := util.GetAllMarkdownMap(ctx, path)
 		if err != nil {
-			r.log.Error("getFilesFromDir", err)
+			r.data.Log.Error("getFilesFromDir", err)
 			continue
 		}
 		for name, date := range files {
@@ -85,7 +81,7 @@ func (r *articleRepo) List(ctx context.Context, offset, limit int64) (total int6
 	var files []file
 	total, files, err = r.getFilesFromDir(ctx)
 	if err != nil {
-		r.log.Error("articleRepo.List", err)
+		r.data.Log.Error("articleRepo.List", err)
 		return
 	}
 	if offset > total {
@@ -118,12 +114,12 @@ func (r *articleRepo) Detail(ctx context.Context, id string) (article *dataV1.Ar
 	var path string
 	path, err = util.GetPath(ctx, id)
 	if err != nil {
-		r.log.Error("articleRepo.Detail Decode err .", err)
+		r.data.Log.Error("articleRepo.Detail Decode err .", err)
 		return
 	}
 	article.Title, article.UpdatedAt, article.Content, err = util.GetMarkdownInfo(ctx, path)
 	if err != nil {
-		r.log.Error("articleRepo.Detail get Detail err .", err)
+		r.data.Log.Error("articleRepo.Detail get Detail err .", err)
 		return
 	}
 	return

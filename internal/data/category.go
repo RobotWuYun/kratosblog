@@ -2,7 +2,6 @@ package data
 
 import (
 	"context"
-	"github.com/go-kratos/kratos/v2/log"
 	dataV1 "kratosblog/api/kratosblog/data/v1"
 	"kratosblog/internal/biz"
 	"kratosblog/internal/util"
@@ -11,7 +10,6 @@ import (
 
 type categoryRepo struct {
 	data *Data
-	log  *log.Helper
 
 	auth biz.AuthRepo
 }
@@ -24,12 +22,10 @@ var DisableDirList = []string{
 // NewCategoryRepo .
 func NewCategoryRepo(
 	data *Data,
-	logger log.Logger,
 	auth biz.AuthRepo,
 ) biz.CategoryRepo {
 	return &categoryRepo{
 		data: data,
-		log:  log.NewHelper(logger),
 		auth: auth,
 	}
 }
@@ -46,8 +42,11 @@ func (r *categoryRepo) List(ctx context.Context) (list []*dataV1.Category, err e
 	}
 	return
 }
-
 func (r *categoryRepo) MapPath(ctx context.Context) (cateMap map[string]string, err error) {
+	return
+}
+
+func (r *categoryRepo) mapPathForFS(ctx context.Context) (cateMap map[string]string, err error) {
 	cateMap = make(map[string]string)
 	var getAll bool
 	if getAll, err = r.auth.Check(ctx); err != nil {
@@ -57,7 +56,7 @@ func (r *categoryRepo) MapPath(ctx context.Context) (cateMap map[string]string, 
 	var allCates []string
 	allCates, err = util.GetAllLeafCate(ctx, r.data.conf.GetData().GetRepository().GetPath())
 	if err != nil {
-		r.log.Error("GetAllLeafCate err .", err)
+		r.data.Log.Error("GetAllLeafCate err .", err)
 		return
 	}
 	for _, cate := range allCates {
